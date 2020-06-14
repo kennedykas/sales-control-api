@@ -1,0 +1,52 @@
+[
+    {
+        "type": "header",
+        "version": "4.9.2",
+        "comment": "Export to JSON plugin for PHPMyAdmin"
+    },
+    {
+        "type": "database",
+        "name": "sales-control"
+    },
+    {
+        "type": "table",
+        "name": "clients",
+        "database": "sales-control",
+        "data": [
+            {
+                "id": "1",
+                "name": "KENNEDY",
+                "phone": "",
+                "email": "",
+                "register-date": "2019-01-27"
+            }
+        ]
+    },
+    {
+        "type": "table",
+        "name": "products",
+        "database": "sales-control",
+        "data": [
+            {
+                "id": "1",
+                "name": "",
+                "value": "0.00"
+            }
+        ]
+    },
+    {
+        "type": "table",
+        "name": "sales",
+        "database": "sales-control",
+        "data": [
+            {
+                "id": "1",
+                "client": "1",
+                "product": "2",
+                "quantity": "1",
+                "date": "2019-01-27 11:56:39",
+                "payment": null
+            }
+        ]
+    }
+]
