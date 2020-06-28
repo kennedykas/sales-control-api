@@ -10,10 +10,6 @@ const ProductSchema = new db.Schema({
     },
     code: {
         type: String
-    },
-    amount: {
-        type: Number,
-        required: true
     }
 })
 
