@@ -2,6 +2,7 @@ const express = require('express')
 const authMiddeleware = require('../src/middelewares/auth.js')
 const router = express.Router()
 const Products = require('../models/products')
+const Bill = require('../models/custumerBill')
 router.use(authMiddeleware)
 
 router.get('/products', async (req, res) => {
@@ -31,7 +32,20 @@ router.post('/products', async (req, res) => {
         const products = await Products.create(req.body)
         return res.send({ products })
     } catch (err) {
-        return res.status(400).send({ error: 'failed to register the product' })
+router.delete('/products', async (req, res) => {
+    const { product } = req.body
+    try {
+        if (!await Bill.findOne({ product })) {
+            await Products.findOneAndRemove({ _id: product })
+            res.send('Product deleted.')
+        } else {
+            res.status(409).send({ error: 'The product is registered in an open invoice.' })
+        }
+    } catch (err) {
+        console.log(err)
+        return res.status(404).send({ error: 'Product not found.' })
+    }
+})
     }
 })
 
