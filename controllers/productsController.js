@@ -2,7 +2,7 @@ const express = require('express')
 const authMiddeleware = require('../src/middelewares/auth.js')
 const router = express.Router()
 const Products = require('../models/products')
-const Bill = require('../models/custumerBill')
+const Bill = require('../models/customerBill')
 router.use(authMiddeleware)
 
 router.get('/products', async (req, res) => {
@@ -28,8 +28,8 @@ router.post('/products', async (req, res) => {
         if (await Products.findOne({ descrition })) {
             return res.status(400).send({ error: 'Product name already exists.' })
         }
-        const products = await Products.create(req.body)
-        return res.status(201).send({ products })
+        await Products.create(req.body)
+        return res.status(201).send('Product added')
     } catch (err) {
         return res.status(400).send({ error: 'Failed to register the product.' })
     }
