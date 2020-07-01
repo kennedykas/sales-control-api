@@ -2,14 +2,17 @@ const db = require('../database/index')
 const ProductSchema = new db.Schema({
     descrition: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     price: {
         type: String,
         required: true
     },
     code: {
-        type: String
+        type: String,
+        required: true,
+        unique: true
     }
 })
 
