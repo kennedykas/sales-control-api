@@ -19,7 +19,6 @@ const UserSchema = new db.Schema({
     },
     email: {
         type: String,
-        unique: true,
         lowercase: true
     },
     password: {
