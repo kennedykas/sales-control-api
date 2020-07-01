@@ -46,6 +46,13 @@ router.delete('/products', async (req, res) => {
         return res.status(404).send({ error: 'Product not found.' })
     }
 })
+router.put('/products', async (req, res) => {
+    const { id, descrition, price, code } = req.body
+    try {
+        await Products.findOneAndUpdate({ _id: id }, { descrition, price, code })
+        return res.status(200).send('Changed product.')
+    } catch (err) {
+        return res.status(404).send({ error: err })
     }
 })
 
