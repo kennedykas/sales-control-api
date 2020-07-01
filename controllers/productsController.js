@@ -10,13 +10,12 @@ router.get('/products', async (req, res) => {
         const page = req.query.page
         const limit = parseInt(req.query.limit)
         const skip = limit * (page - 1)
-
         await Products.find().skip(skip).limit(limit).exec((err, products) => {
-            res.send({ products })
             if (err) throw err
+            return res.status(200).send({ products })
         })
     } catch (err) {
-        return res.status(400).send({ error: 'Error loding products' })
+        return res.status(400).send({ error: 'Error loding products.' })
     }
 })
 
@@ -30,22 +29,27 @@ router.post('/products', async (req, res) => {
             return res.status(400).send({ error: 'Product name already exists.' })
         }
         const products = await Products.create(req.body)
-        return res.send({ products })
+        return res.status(201).send({ products })
     } catch (err) {
+        return res.status(400).send({ error: 'Failed to register the product.' })
+    }
+})
+
 router.delete('/products', async (req, res) => {
     const { product } = req.body
     try {
         if (!await Bill.findOne({ product })) {
             await Products.findOneAndRemove({ _id: product })
-            res.send('Product deleted.')
+            return res.status(200).send('Produtct deletet.')
         } else {
-            res.status(409).send({ error: 'The product is registered in an open invoice.' })
+            return res.status(409).send({ error: 'The product is registered in an open invoice.' })
         }
     } catch (err) {
         console.log(err)
         return res.status(404).send({ error: 'Product not found.' })
     }
 })
+
 router.put('/products', async (req, res) => {
     const { id, descrition, price, code } = req.body
     try {
