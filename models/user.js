@@ -7,12 +7,12 @@ const UserSchema = new db.Schema({
 
     name: {
         type: String,
-        unique: true,
-        required: true
+        require: true,
+        unique: true
+
     },
     cpf: {
-        type: String,
-        unique: true
+        type: String
     },
     phone: {
         type: String
@@ -40,11 +40,14 @@ const UserSchema = new db.Schema({
 })
 
 UserSchema.pre('save', async function (next) {
-    const ENCRYPT_ROUNDS = 10
-    const hash = await bcrypt.hash(this.password, ENCRYPT_ROUNDS)
-    this.password = hash
+    if (this.role === 'ADMIN') {
+        const ENCRYPT_ROUNDS = 10
+        const hash = await bcrypt.hash(this.password, ENCRYPT_ROUNDS)
+        this.password = hash
+    }
     next()
 })
+
 
 const User = db.model('User', UserSchema)
 module.exports = User
