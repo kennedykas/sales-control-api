@@ -51,10 +51,18 @@ router.delete('/products', async (req, res) => {
 })
 
 router.put('/products', async (req, res) => {
-    const { id, descrition, price, code } = req.body
+    const { _id, descrition, price, code } = req.body
     try {
-        await Products.findOneAndUpdate({ _id: id }, { descrition, price, code })
-        return res.status(200).send('Changed product.')
+        const product = await Products.findOne({ _id })
+        if (product) {
+            if (code === '' || await Products.findOne({ code: code, _id: _id }) || !await Products.findOne({ code: code })) {
+                await product.update({ descrition, price, code })
+                return res.status(200).send({ success: 'Changed product.' })
+            }
+            return res.status(404).send({ error: 'Product code already exists.' })
+        } else {
+            throw new Error()
+        }
     } catch (err) {
         return res.status(404).send({ error: err })
     }
