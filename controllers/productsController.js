@@ -12,7 +12,7 @@ router.get('/products', async (req, res) => {
         const skip = limit * (page - 1)
         await Products.find().skip(skip).limit(limit).exec((err, products) => {
             if (err) throw err
-            return res.status(200).send({ products })
+            return res.status(200).send(products)
         })
     } catch (err) {
         return res.status(400).send({ error: 'Error loding products.' })
@@ -22,31 +22,35 @@ router.get('/products', async (req, res) => {
 router.post('/products', async (req, res) => {
     const { code, descrition } = req.body
     try {
-        if (await Products.findOne({ code })) {
-            return res.status(400).send({ error: 'Product code already exists.' })
+        if (code) {
+            if (await Products.findOne({ code })) {
+                return res.status(400).send({ error: 'Product code already exists.' })
+            }
         }
         if (await Products.findOne({ descrition })) {
             return res.status(400).send({ error: 'Product name already exists.' })
         }
         await Products.create(req.body)
-        return res.status(201).send('Product added')
+        return res.status(201).send({ success: 'Product added' })
     } catch (err) {
         return res.status(400).send({ error: 'Failed to register the product.' })
     }
 })
 
 router.delete('/products', async (req, res) => {
-    const { product } = req.body
+    const idProduct = req.body._id
+    const product = Products.findOne({ _id: idProduct })
     try {
-        if (!await Bill.findOne({ product })) {
-            await Products.findOneAndRemove({ _id: product })
-            return res.status(200).send('Produtct deletet.')
+        if (!await Bill.findOne({ product: idProduct, billPaymentDate: null })) {
+            if (product) {
+                await product.remove()
+                return res.status(200).send({ success: 'Produtct deletet.' })
+            } else return res.status(404).send({ error: 'Product not found.' })
         } else {
             return res.status(409).send({ error: 'The product is registered in an open invoice.' })
         }
     } catch (err) {
-        console.log(err)
-        return res.status(404).send({ error: 'Product not found.' })
+        return res.status(500).send({ error: err })
     }
 })
 
