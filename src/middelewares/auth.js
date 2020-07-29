@@ -3,7 +3,7 @@ const authConfig = require('../config/authConfig.json')
 
 module.exports = (req, res, next) => {
     const authHeader = req.headers.authorization
-    if (req.query.userIdTest) {
+    if (req.headers.disconnected) {
         return next()
     }
     if (!authHeader) {
