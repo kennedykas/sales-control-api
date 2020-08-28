@@ -15,7 +15,7 @@ router.get('/products', async (req, res) => {
             return res.status(200).send(products)
         })
     } catch (err) {
-        return res.status(400).send({ error: 'Error loding products.' })
+        return res.status(400).send({ error: 'Erro ao carregar os produtos.' })
     }
 })
 
@@ -24,16 +24,16 @@ router.post('/products', async (req, res) => {
     try {
         if (code) {
             if (await Products.findOne({ code })) {
-                return res.status(400).send({ error: 'Product code already exists.' })
+                return res.status(400).send({ error: 'Código do produto ja existe.' })
             }
         }
         if (await Products.findOne({ descrition })) {
-            return res.status(400).send({ error: 'Product name already exists.' })
+            return res.status(400).send({ error: 'Nome do produto ja existe.' })
         }
         await Products.create(req.body)
-        return res.status(201).send({ success: 'Product added' })
+        return res.status(201).send({ success: 'Produto adicionado' })
     } catch (err) {
-        return res.status(400).send({ error: 'Failed to register the product.' })
+        return res.status(400).send({ error: 'Falha ao registrar o produto.' })
     }
 })
 
@@ -44,10 +44,10 @@ router.delete('/products', async (req, res) => {
         if (!await Bill.findOne({ product: idProduct, billPaymentDate: null })) {
             if (product) {
                 await product.remove()
-                return res.status(200).send({ success: 'Produtct deletet.' })
-            } else return res.status(404).send({ error: 'Product not found.' })
+                return res.status(200).send({ success: 'Produto deletado.' })
+            } else return res.status(404).send({ error: 'Produto não encontrado.' })
         } else {
-            return res.status(409).send({ error: 'The product is registered in an open invoice.' })
+            return res.status(409).send({ error: 'O produto está registrado em uma fatura em aberto.' })
         }
     } catch (err) {
         return res.status(500).send({ error: err })
@@ -61,9 +61,9 @@ router.put('/products', async (req, res) => {
         if (product) {
             if (code === '' || await Products.findOne({ code: code, _id: _id }) || !await Products.findOne({ code: code })) {
                 await product.update({ descrition, price, code })
-                return res.status(200).send({ success: 'Changed product.' })
+                return res.status(200).send({ success: 'Produto alterado.' })
             }
-            return res.status(404).send({ error: 'Product code already exists.' })
+            return res.status(404).send({ error: 'Código do produto ja existe.' })
         } else {
             throw new Error()
         }

@@ -19,7 +19,7 @@ router.get('/user', async (req, res) => {
             return res.status(200).send(user)
         })
     } catch (err) {
-        return res.status(400).send({ error: 'Error loding users.' })
+        return res.status(400).send({ error: 'Erro ao carregar o cliente.' })
     }
 })
 
@@ -31,8 +31,8 @@ router.post('/user', async (req, res) => {
                 phone: req.body.phone,
                 email: req.body.email
             })
-            return res.status(200).send({ success: 'User created.' })
-        } else return res.status(406).send({ error: 'Name user already exist.' })
+            return res.status(200).send({ success: 'Usuário criado.' })
+        } else return res.status(406).send({ error: 'Nome de usuário já existe.' })
     } catch (err) { return res.status(400).send({ error: err }) }
 })
 
@@ -44,8 +44,8 @@ router.put('/user', async (req, res) => {
                 phone: req.body.phone,
                 email: req.body.email
             })
-            return res.status(200).send({ success: 'User changed.' })
-        } else return res.status(406).send({ error: 'Name cannot be empty' })
+            return res.status(200).send({ success: 'Usuário alterado.' })
+        } else return res.status(406).send({ error: 'Nome não pode ser em branco' })
     } catch (err) { return res.status(400).send({ error: err }) }
 })
 
@@ -53,9 +53,9 @@ router.delete('/user', async (req, res) => {
     try {
         if (!await Bill.findOne({ customer: req.body._id, billPaymentDate: null })) {
             await User.deleteOne({ _id: req.body._id })
-            return res.status(200).send({ success: 'User deleted.' })
+            return res.status(200).send({ success: 'Usuário apagado.' })
         }
-        return res.status(409).send({ error: 'The client is registered in an open invoice.' })
+        return res.status(409).send({ error: 'O cliente está com uma fatura não paga.' })
     } catch (err) { return res.status(400).send({ error: err }) }
 })
 
