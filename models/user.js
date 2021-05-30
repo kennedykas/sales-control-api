@@ -9,7 +9,6 @@ const UserSchema = new db.Schema({
         type: String,
         require: true,
         unique: true
-
     },
     cpf: {
         type: String
@@ -47,7 +46,6 @@ UserSchema.pre('save', async function (next) {
     }
     next()
 })
-
 
 const User = db.model('User', UserSchema)
 module.exports = User

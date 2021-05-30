@@ -13,10 +13,14 @@ router.get('/user', async (req, res) => {
         }
         const page = req.query.page
         const limit = parseInt(req.query.limit)
-            const skip = limit * (page - 1)
+        const skip = limit * (page - 1)
         await User.find().skip(skip).limit(limit).exec((err, user) => {
+            const users = []
+            user.map(e => {
+                if (e.role !== 'ADMIN') users.push(e)
+            })
             if (err) throw err
-            return res.status(200).send(user)
+            return res.status(200).send(users)
         })
     } catch (err) {
         return res.status(400).send({ error: 'Erro ao carregar o cliente.' })
